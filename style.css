@@ -17,7 +17,23 @@ nav {
 	text-align: center;
 	padding: 0.5em 0;
 }
+#signup,
+#login {
+	display: flex;
+	flex-direction: column;
+	width: 40%;
+	gap: 8px;
+}
 
+#signup-h2,
+#login-h2 {
+	display: flex;
+	justify-content: center;
+}
+form {
+	display: flex;
+	justify-content: center;
+}
 nav ul {
 	list-style-type: none;
 	margin: 0;

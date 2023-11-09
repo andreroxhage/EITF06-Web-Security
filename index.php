@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="style.css">
-        <title>Shopping Cart</title>
+        <title>Your Web Shop</title>
     </head>
 
     <body>
@@ -14,15 +14,15 @@
         </header>
         <nav>
             <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="signup.html">Sign Up</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="cart.html">Shopping Cart</a></li>
+                <li><a href="/EITF06-Web-Security/index.php">Home</a></li>
+                <li><a href="/EITF06-Web-Security/signup.php">Sign Up</a></li>
+                <li><a href="/EITF06-Web-Security/login.php">Login</a></li>
+                <li><a href="/EITF06-Web-Security/cart.php">Shopping Cart</a></li>
             </ul>
         </nav>
         <main>
-            <h2>Shopping Cart</h2>
-            <!-- Display shopping cart items and implement checkout functionality -->
+            <h2>Welcome to Your Web Shop!</h2>
+            <!-- Add your main content here -->
         </main>
         <footer>
             <p>&copy; 2023 Web Shop</p>
