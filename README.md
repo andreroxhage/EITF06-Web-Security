@@ -3,9 +3,9 @@ Course project for EITF06 - Web Security at LTH
 
 ## To-do
 The implementation part of the project has three phases;
-• construction,
-• attack,
-• functionality peer-review.
+- construction,
+- attack,
+- functionality peer-review.
 
 ---
 ## Construction phase
