@@ -7,6 +7,15 @@ The implementation part of the project has three phases;
 - attack,
 - functionality peer-review.
 
+### Action list
+2023-11-06 by 23:59, register to be assigned to a group. If during registration you specify a partner to work with, only one of you should register both!
+2023-11-15 by 23:59, book presentation time for your cluster (agree on a time, time slots listed below), email Denis.
+2023-11-16 by 23:59, book functionality review time for your review groups.
+2023-12-11 by 23:59, mail your report to your reviewers, cc Denis.
+2023-12-14 by 23:59, mail your reviews to your peers, cc Denis.
+2023-12-15 by 23:59, submit your report bundle to Canvas page (under Assignments ->Web shop project assignment) together with your code and configuration files.
+Day before scheduled presentation by 23.59, mail presentation slides (pdf) to Denis.
+
 ---
 ## Construction phase
 - Programming language is PHP.
