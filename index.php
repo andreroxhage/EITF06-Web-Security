@@ -2,6 +2,13 @@
 session_start();
 ?>
 
+<?php
+// Set session variables for testing
+$_SESSION["favcolor"] = "green";
+$_SESSION["favanimal"] = "cat";
+echo "Session variables are set.";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,6 +42,15 @@ session_start();
         echo '<p id="signup-h2">Welcome, Guest!</p> <a href="login.php" id="signup-h2">Please login</a>.';
     }
     ?>
+
+            <div>
+                <h2>Item 1</h2>
+                <a href="/EITF06-Web-Security/cart.php">Order now!</a>
+                <img id="cookie"
+                    src="
+                    https://www.dessertfortwo.com/wp-content/uploads/2023/04/Single-Serve-Chocolate-Chip-Cookie-5-735x1103.jpg"
+                    alt="cookie">
+            </div>
         </main>
         <footer>
             <p>&copy; 2023 Web Shop</p>

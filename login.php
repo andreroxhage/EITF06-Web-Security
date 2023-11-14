@@ -1,4 +1,7 @@
-<!-- Similar structure as index.html, with a form for user login -->
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
