@@ -27,6 +27,8 @@ if( $_POST["password"] !== $_POST["password_confirmation"] ) {
 }
 
 // TO-DO add salt to hash of psw
+// It is strongly recommended that you do not generate your own salt for this function. It will create a secure salt automatically for you if you do not specify one.
+As noted above, providing the salt option in PHP 7.0 will generate a deprecation warning. Support for providing a salt manually has been removed in PHP 8.0.
 
 $password_hash = password_hash( $_POST["password"], PASSWORD_DEFAULT );
 
