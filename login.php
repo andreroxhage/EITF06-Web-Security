@@ -1,5 +1,36 @@
 <?php
-session_start();
+// Handle user authentication logic, including password verification
+// Redirect to appropriate page after authentication
+
+$is_invalid = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $mysqli = require __DIR__ ."/database.php";
+    $sql  = sprintf(
+        "SELECT *
+        FROM user
+        WHERE username = '%s'",
+        $mysqli->real_escape_string($_POST["username"])
+    ); // real escape prevents SQL injections
+
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+
+    if ($user) {
+        if (password_verify($_POST["password"], $user["password_hash"])) {
+
+            session_start();
+
+            session_regenerate_id();    
+            
+            $_SESSION["user_id"] = $user["id"];
+            header("Location: index.php");
+            exit;
+        }
+    }
+    $is_invalid = true;
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,8 +57,12 @@ session_start();
         </nav>
         <main>
             <h2 id="login-h2">Login</h2>
-            <form action="authenticate.php" method="post">
+            <form method="post" novalidate>
                 <div id="login">
+                    <?php if ($is_invalid): ?>
+                    <em>Invalid login</em>
+                    <?php endif; ?>
+
                     <label for="username">Username:</label>
                     <input type="text" name="username" required>
                     <label for="password">Password:</label>

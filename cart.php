@@ -24,10 +24,21 @@ session_start();
                 <li><a href="/EITF06-Web-Security/cart.php">Shopping Cart</a></li>
             </ul>
         </nav>
+
+
         <main>
             <h2>Shopping Cart</h2>
             <!-- Display shopping cart items and implement checkout functionality -->
+            
+            <?php if (isset($user)): ?>
+            <?php endif: ?>
+            
         </main>
+
+
+
+
+
         <footer>
             <p>&copy; 2023 Web Shop</p>
         </footer>

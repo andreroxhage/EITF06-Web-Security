@@ -1,4 +1,5 @@
 <?php
+// Handle user registration logic, including password hashing and database insertion
 
 // Server-side validation
 if ( empty( $_POST["username"] ) ) {
@@ -44,6 +45,7 @@ if( ! $stmt->prepare( $sql ) ) {
 
 $stmt->bind_param("sss", $_POST["username"],$_POST["address"],$password_hash); // sss means all three inputs are strings
 
+// Redirect to appropriate page after registration
 if( $stmt->execute() ) {
     header("Location: index.php");
     exit();
@@ -54,17 +56,5 @@ if( $stmt->execute() ) {
         die($mysqli-> error . " " . $mysqli->errno);
     }
 }
-
-// ANDRÈ
-// CONTINUE 
-// 20:10
-// https://www.youtube.com/watch?v=5L9UhOnuos0
-
-
-
-
-
-// Handle user registration logic, including password hashing and database insertion
-// Redirect to appropriate page after registration
 
 ?>
