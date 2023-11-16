@@ -72,6 +72,12 @@ a:visited {
 	color: white;
 }
 
+#cookie-container {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+}
+
 #cookie {
 	background-size: contain;
 	width: 200px;

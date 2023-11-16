@@ -31,7 +31,9 @@ session_start();
             <!-- Display shopping cart items and implement checkout functionality -->
             
             <?php if (isset($user)): ?>
-            <?php endif: ?>
+
+            
+            <?php endif; ?>
             
         </main>
 

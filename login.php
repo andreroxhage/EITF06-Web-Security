@@ -1,12 +1,35 @@
 <?php
+session_start();
+
 // Handle user authentication logic, including password verification
 // Redirect to appropriate page after authentication
 
 $is_invalid = false;
+$max_attempts = 3; // Log in attempts per session
+$lockout_duration = 300; // 5 minutes in seconds
+$max_lockout_duration = 1800; // 30 minutes
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $mysqli = require __DIR__ ."/database.php";
+
+    // Log the failed login attempts. Creates failed attemps session variable based on IP
+    $failed_attempts_key = 'failed_login_attempts_' . $_SERVER['REMOTE_ADDR']; 
+    $failed_attempts = isset($_SESSION[$failed_attempts_key]) ? $_SESSION[$failed_attempts_key] : 0;
+    $failed_attempts++;
+
+    // Lockout user based on number of failed login attempts. Uses session variable to keep track of attempts based on IP
+    $_SESSION[$failed_attempts_key] = $failed_attempts; 
+
+    // Gradually increase the lockout time. However it wont exeed the maximum duration.
+    if ($failed_attempts >= $max_attempts) {
+        $new_lockout_duration = min($lockout_duration * 2, $max_lockout_duration);
+        
+        $_SESSION['lockout_time'] = time();
+        $_SESSION['lockout_duration'] = $new_lockout_duration;
+        die("You are temporarily locked out. Please try again later.");
+    }
+    
     $sql  = sprintf(
         "SELECT *
         FROM user
@@ -19,16 +42,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user) {
         if (password_verify($_POST["password"], $user["password_hash"])) {
-
-            session_start();
-
             session_regenerate_id();    
-            
             $_SESSION["user_id"] = $user["id"];
             header("Location: index.php");
             exit;
         }
     }
+    
+    if(isset($_SESSION["lockout_time"]) && time() - $_SESSION['lockout_time'] < $lockout_duration){
+        die("You are currently locked out. Please try again later.");
+    }
+
     $is_invalid = true;
 }
 ?>

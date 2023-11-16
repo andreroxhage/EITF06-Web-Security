@@ -44,16 +44,16 @@ if (isset($_SESSION["user_id"])) {
             <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
 
-            <p><a id="black_link" href="logout.php">Log out</a></p>
+            <button><a id="black_link" href="logout.php">Log out</a></button>
 
             <?php else: ?>
-            <h3>Please log or sign in!</h3>
+            <h3>Please log in or sign up!</h3>
 
 
 
             <?php endif; ?>
 
-            <div>
+            <div id="cookie-container">
                 <h2>Item 1</h2>
 
                 <?php
