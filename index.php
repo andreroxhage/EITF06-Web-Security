@@ -1,6 +1,7 @@
 <?php
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
-
 
 if (isset($_SESSION["user_id"])) {  
     $mysqli = require __DIR__ . "/database.php";
@@ -12,7 +13,6 @@ if (isset($_SESSION["user_id"])) {
     $user = $result->fetch_assoc();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

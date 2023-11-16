@@ -1,4 +1,6 @@
 <?php
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 ?>
 
@@ -39,6 +41,15 @@ session_start();
 
                     <label for="password_confirmation">Repeat Password:</label>
                     <input type="password" name="password_confirmation" required>
+
+                    <p>Password must:</p>
+                    <ul>
+                        <li>Be at least 8 characters</li>
+                        <li>Contain at least one uppercase letter</li>
+                        <li>Contain at least one lowercase letter</li>
+                        <li>Contain at least one number</li>
+                        <li>Contain at least one special character (e.g., !@#$%^&*())</li>
+                    </ul>
 
                     <input type="submit" value="Sign Up">
                 </div>

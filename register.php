@@ -1,6 +1,7 @@
 <?php
 // Handle user registration logic, including password hashing and database insertion
-
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 
 // Function to check if the signup rate limit is exceeded
@@ -32,24 +33,29 @@ if (isSignupLimited()) {
 }
 
 // Server-side validation
-if ( empty( $_POST["username"] ) ) {
-    die("Username is required!"); 
-}
-
-if ( empty( $_POST["address"] ) ) {
-    die("Valid address is required"); 
-}
-
-if (strlen( $_POST["password"] ) < 8) {
+// Check if password meets the minimum length requirement
+if (strlen($_POST["password"]) < 8) {
     die("Password must be at least 8 characters");
 }
 
-if( !preg_match("/[a-z]/i", $_POST["password"] ) ) {
-    die("Password must contain at least one letter");
+// Check if password contains at least one uppercase letter
+if (!preg_match("/[A-Z]/", $_POST["password"])) {
+    die("Password must contain at least one uppercase letter");
 }
 
-if( !preg_match("/[0-9]/i", $_POST["password"] ) ) {
+// Check if password contains at least one lowercase letter
+if (!preg_match("/[a-z]/", $_POST["password"])) {
+    die("Password must contain at least one lowercase letter");
+}
+
+// Check if password contains at least one number
+if (!preg_match("/[0-9]/", $_POST["password"])) {
     die("Password must contain at least one number");
+}
+
+// Check if password contains at least one special character
+if (!preg_match("/[!@#$%^&*(),.?\":{}|<>]/", $_POST["password"])) {
+    die("Password must contain at least one special character");
 }
 
 // Check against common password blacklist

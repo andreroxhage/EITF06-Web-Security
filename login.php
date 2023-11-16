@@ -1,4 +1,6 @@
 <?php
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 
 // Handle user authentication logic, including password verification
@@ -40,9 +42,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $mysqli->query($sql);
     $user = $result->fetch_assoc();
 
+    // Successful login:
+    //regenerate_id = Prevents session fixation attacks: deletes previous session id and generates a new one, while keeping the session variables    
     if ($user) {
         if (password_verify($_POST["password"], $user["password_hash"])) {
-            session_regenerate_id();    
+            session_regenerate_id(true); 
             $_SESSION["user_id"] = $user["id"];
             header("Location: index.php");
             exit;

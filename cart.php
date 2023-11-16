@@ -1,4 +1,6 @@
 <?php
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
 session_start();
 ?>
 
@@ -29,12 +31,12 @@ session_start();
         <main>
             <h2>Shopping Cart</h2>
             <!-- Display shopping cart items and implement checkout functionality -->
-            
+
             <?php if (isset($user)): ?>
 
-            
+
             <?php endif; ?>
-            
+
         </main>
 
 
