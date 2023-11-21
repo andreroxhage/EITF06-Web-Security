@@ -1,4 +1,5 @@
 <?php
+// Handle user registration logic, including password hashing and database insertion
 
 // Server-side validation
 if ( empty( $_POST["username"] ) ) {
@@ -26,6 +27,8 @@ if( $_POST["password"] !== $_POST["password_confirmation"] ) {
 }
 
 // TO-DO add salt to hash of psw
+// It is strongly recommended that you do not generate your own salt for this function. It will create a secure salt automatically for you if you do not specify one.
+As noted above, providing the salt option in PHP 7.0 will generate a deprecation warning. Support for providing a salt manually has been removed in PHP 8.0.
 
 $password_hash = password_hash( $_POST["password"], PASSWORD_DEFAULT );
 
@@ -44,6 +47,7 @@ if( ! $stmt->prepare( $sql ) ) {
 
 $stmt->bind_param("sss", $_POST["username"],$_POST["address"],$password_hash); // sss means all three inputs are strings
 
+// Redirect to appropriate page after registration
 if( $stmt->execute() ) {
     header("Location: index.php");
     exit();
@@ -54,17 +58,5 @@ if( $stmt->execute() ) {
         die($mysqli-> error . " " . $mysqli->errno);
     }
 }
-
-// ANDRÈ
-// CONTINUE 
-// 20:10
-// https://www.youtube.com/watch?v=5L9UhOnuos0
-
-
-
-
-
-// Handle user registration logic, including password hashing and database insertion
-// Redirect to appropriate page after registration
 
 ?>

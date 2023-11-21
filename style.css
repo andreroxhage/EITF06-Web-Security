@@ -77,3 +77,7 @@ a:visited {
 	width: 200px;
 	height: auto;
 }
+
+#black_link {
+	color: black;
+}

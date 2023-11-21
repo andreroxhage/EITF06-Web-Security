@@ -1,13 +1,18 @@
 <?php
 session_start();
+
+
+if (isset($_SESSION["user_id"])) {  
+    $mysqli = require __DIR__ . "/database.php";
+    
+    $sql = "SELECT * FROM user
+            WHERE id = {$_SESSION["user_id"]}";
+            
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+}
 ?>
 
-<?php
-// Set session variables for testing
-$_SESSION["favcolor"] = "green";
-$_SESSION["favanimal"] = "cat";
-echo "Session variables are set.";
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -33,19 +38,36 @@ echo "Session variables are set.";
         </nav>
         <main>
             <h2 id="signup-h2">Welcome to Your Web Shop!</h2>
-            <?php
-    // Check if the user is logged in
-    if (isset($_SESSION['user_id'])) {
-        echo 'Welcome, ' . $_SESSION['username'] . '!';
-        // Add other content for logged-in users
-    } else {
-        echo '<p id="signup-h2">Welcome, Guest!</p> <a href="login.php" id="signup-h2">Please login</a>.';
-    }
-    ?>
+
+            <?php if (isset($user)): ?>
+
+            <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
+
+
+            <p><a id="black_link" href="logout.php">Log out</a></p>
+
+            <?php else: ?>
+            <h3>Please log or sign in!</h3>
+
+
+
+            <?php endif; ?>
 
             <div>
                 <h2>Item 1</h2>
-                <a href="/EITF06-Web-Security/cart.php">Order now!</a>
+
+                <?php
+                if (isset($_POST['addToSession'])) {
+                    // Perform any logic to add to the session variable
+                    $_SESSION['cart'] = isset($_SESSION['cart']) ? $_SESSION['counter'] + 1 : 1;
+                    
+                }
+                ?>
+
+                <form method="post" action="">
+                    <input type="submit" name="Add to cart" value="Add to Cart">
+                </form>
+
                 <img id="cookie"
                     src="
                     https://www.dessertfortwo.com/wp-content/uploads/2023/04/Single-Serve-Chocolate-Chip-Cookie-5-735x1103.jpg"
