@@ -20,6 +20,12 @@ if (isset($_SESSION["user_id"])) {
     $result = $mysqli->query($sql);
     $user = $result->fetch_assoc();
 }
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {    
+    // Increment the cart count in the session
+    $_SESSION['cart'] = isset($_SESSION['cart']) ? $_SESSION['cart'] + 1 : 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -51,29 +57,24 @@ if (isset($_SESSION["user_id"])) {
 
             <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
-
             <button><a id="black_link" href="logout.php">Log out</a></button>
 
             <?php else: ?>
             <h3>Please log in or sign up!</h3>
 
-
-
             <?php endif; ?>
 
             <div id="cookie-container">
-                <h2>Item 1</h2>
+                <h2>Choco Cookie</h2>
 
-                <?php
-                if (isset($_POST['addToSession'])) {
-                    // Perform any logic to add to the session variable
-                    $_SESSION['cart'] = isset($_SESSION['cart']) ? $_SESSION['counter'] + 1 : 1;
-                    
-                }
-                ?>
+                <?php if (isset($user)): ?>
+                <p>Current cart contains:</p>
+                <p><?= htmlspecialchars(isset($_SESSION['cart']) ? $_SESSION['cart'] : 0) ?></p>
+                <?php endif; ?>
 
+                <!-- Add 1 to cart -->
                 <form method="post" action="">
-                    <input type="submit" name="Add to cart" value="Add to Cart">
+                    <input type="submit" name="addToCart" value="Add to Cart">
                 </form>
 
                 <img id="cookie"
