@@ -1,5 +1,25 @@
 <?php
+// Set session timeout to 30 minutes
+ini_set('session.gc_maxlifetime', 1800);
+session_set_cookie_params([
+    'lifetime' => 1800, // match your session timeout
+    'path' => '/',
+    'domain' => '',
+    'secure' => true, // Send cookie only over HTTPS
+    'httponly' => true, // Prevent client-side access to the cookie
+    'samesite' => 'Strict', // prevents cookie from being sent by the browser with cross-site requests. Prevents CSRF-attacks
+]);
 session_start();
+
+if (isset($_SESSION["user_id"])) {  
+    $mysqli = require __DIR__ . "/database.php";
+    
+    $sql = "SELECT * FROM user
+            WHERE id = {$_SESSION["user_id"]}";
+            
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +45,12 @@ session_start();
             </ul>
         </nav>
         <main>
+
+            <?php if (isset($user)): ?>
+            <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
+
+            <?php else: ?>
+
             <h2 id="signup-h2">Sign Up</h2>
             <form action="register.php" method="post" novalidate>
                 <div id="signup">
@@ -40,9 +66,20 @@ session_start();
                     <label for="password_confirmation">Repeat Password:</label>
                     <input type="password" name="password_confirmation" required>
 
+                    <p>Password must:</p>
+                    <ul>
+                        <li>Be at least 8 characters</li>
+                        <li>Contain at least one uppercase letter</li>
+                        <li>Contain at least one lowercase letter</li>
+                        <li>Contain at least one number</li>
+                        <li>Contain at least one special character (e.g., !@#$%^&*())</li>
+                    </ul>
+
                     <input type="submit" value="Sign Up">
                 </div>
             </form>
+
+            <?php endif; ?>
         </main>
         <footer>
             <p>&copy; 2023 Web Shop</p>
