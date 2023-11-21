@@ -67,20 +67,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
             <div id="cookie-container">
                 <h2>Choco Cookie</h2>
 
-                <?php if (isset($user)): ?>
-                <p>Current cart contains:</p>
-                <p><?= htmlspecialchars(isset($_SESSION['cart']) ? $_SESSION['cart'] : 0) ?></p>
-                <?php endif; ?>
-
+                <img id="cookie"
+                    src="
+                    https://www.dessertfortwo.com/wp-content/uploads/2023/04/Single-Serve-Chocolate-Chip-Cookie-5-735x1103.jpg"
+                    alt="cookie">
                 <!-- Add 1 to cart -->
                 <form method="post" action="">
                     <input type="submit" name="addToCart" value="Add to Cart">
                 </form>
 
-                <img id="cookie"
-                    src="
-                    https://www.dessertfortwo.com/wp-content/uploads/2023/04/Single-Serve-Chocolate-Chip-Cookie-5-735x1103.jpg"
-                    alt="cookie">
+
             </div>
         </main>
         <footer>

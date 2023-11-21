@@ -10,6 +10,22 @@ session_set_cookie_params([
     'samesite' => 'Strict', // prevents cookie from being sent by the browser with cross-site requests. Prevents CSRF-attacks
 ]);
 session_start();
+
+if (isset($_SESSION["user_id"])) {  
+    $mysqli = require __DIR__ . "/database.php";
+    
+    $sql = "SELECT * FROM user
+            WHERE id = {$_SESSION["user_id"]}";
+            
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmCart'])) {
+    // Redirect to order confirmation page
+    header("Location: order_confirmation.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,21 +51,24 @@ session_start();
             </ul>
         </nav>
 
-
         <main>
             <h2>Shopping Cart</h2>
-            <!-- Display shopping cart items and implement checkout functionality -->
 
             <?php if (isset($user)): ?>
+            <p>Current cart contains:
+                <li><?= htmlspecialchars(isset($_SESSION['cart']) ? $_SESSION['cart'] : 0) ?> choco
+                    cookies</li>
+            </p>
 
+            <form method="post" action="">
+                <button type="submit" name="confirmCart">Confirm order</button>
+            </form>
 
+            <?php else: ?>
+            <h3>Do you want to start shopping? Please log in or sign up first.</h3>
             <?php endif; ?>
 
         </main>
-
-
-
-
 
         <footer>
             <p>&copy; 2023 Web Shop</p>

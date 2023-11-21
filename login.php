@@ -11,6 +11,16 @@ session_set_cookie_params([
 ]);
 session_start();
 
+if (isset($_SESSION["user_id"])) {  
+    $mysqli = require __DIR__ . "/database.php";
+    
+    $sql = "SELECT * FROM user
+            WHERE id = {$_SESSION["user_id"]}";
+            
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+}
+
 // Handle user authentication logic, including password verification
 // Redirect to appropriate page after authentication
 
@@ -92,6 +102,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </ul>
         </nav>
         <main>
+
+            <?php if (isset($user)): ?>
+            <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
+
+            <?php else: ?>
+
             <h2 id="login-h2">Login</h2>
             <form method="post" novalidate>
                 <div id="login">
@@ -106,6 +122,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="submit" value="Login">
                 </div>
             </form>
+
+            <?php endif; ?>
+
         </main>
         <footer>
             <p>&copy; 2023 Web Shop</p>
