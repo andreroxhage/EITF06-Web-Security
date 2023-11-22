@@ -50,16 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['lockout_duration'] = $new_lockout_duration;
         die("You are temporarily locked out. Please try again later.");
     }
-    
-    $sql  = sprintf(
-        "SELECT *
-        FROM user
-        WHERE username = '%s'",
-        $mysqli->real_escape_string($_POST["username"])
-    ); // real escape prevents SQL injections
-
-    $result = $mysqli->query($sql);
+        
+    // Use prepared statement for the login query
+    $sql = "SELECT * FROM user WHERE username = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("s", $_POST["username"]);
+    $stmt->execute();
+    $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+    $stmt->close();
 
     // Successful login:
     //regenerate_id = Prevents session fixation attacks: deletes previous session id and generates a new one, while keeping the session variables    
