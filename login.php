@@ -11,6 +11,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// If aleady logged in set user details
 if (isset($_SESSION["user_id"])) {  
     $mysqli = require __DIR__ . "/database.php";
     
