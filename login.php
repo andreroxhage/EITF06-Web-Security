@@ -34,32 +34,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $mysqli = require __DIR__ ."/database.php";
         
-    // Use prepared statement for the login query
-    $sql  = sprintf(
-        "SELECT *
-        FROM user
-        WHERE username = '%s'",
-        $mysqli->real_escape_string($_POST["username"])
-    ); // real escape prevents SQL injections
+    /* 
+    Vulnerable code with SQL injection vulnerability
+    Scenario: database stores passwords in plain text
 
+    username: a
+    password: $2y$10$gFQoz1D.fyNqwWoDZhgZ1.EU5TEd/RC42B9/t10c5iUFzr5DjznvO
+    
+    Insert
+    username: a
+    password: ' or 1=1 -- 
+
+    This results in logging into 'a' without knowing the password 
+
+    another possible attack is to insert
+    '; DROP TABLE user; --
+    to remove the whole table casuing problems for the website owner.
+    
+    */
+    
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    
+    $sql = "SELECT * FROM user WHERE username = '$username' AND password_hash = '$password'";
     $result = $mysqli->query($sql);
-    $user = $result->fetch_assoc();
 
-    // Successful login:
-    //regenerate_id = Prevents session fixation attacks: deletes previous session id and generates a new one, while keeping the session variables    
-    if ($user) {
-        if (password_verify($_POST["password"], $user["password_hash"])) {
+    if($result) {
+        $user = $result->fetch_assoc();
+            
+        if ($user) {
             session_regenerate_id(true); 
             $_SESSION["user_id"] = $user["id"];
             $is_invalid = true;
             $failed_attempts = 0; // Reset the failed attempt counter
             header("Location: index.php");
             exit;
-        } else{
+        } else {
+            // User not found
             $is_invalid = false;
-        }
+        }  
     }
-
+    
     // Log the failed login attempts. Creates failed attemps session variable based on IP
     $failed_attempts_key = 'failed_login_attempts_' . $_SERVER['REMOTE_ADDR']; 
     $failed_attempts = isset($_SESSION[$failed_attempts_key]) ? $_SESSION[$failed_attempts_key] : 0;
