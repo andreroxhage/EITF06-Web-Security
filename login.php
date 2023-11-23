@@ -11,6 +11,7 @@ session_set_cookie_params([
 ]);
 session_start();
 
+// If aleady logged in set user details
 if (isset($_SESSION["user_id"])) {  
     $mysqli = require __DIR__ . "/database.php";
     
@@ -32,6 +33,32 @@ $max_lockout_duration = 1800; // 30 minutes
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $mysqli = require __DIR__ ."/database.php";
+        
+    // Use prepared statement for the login query
+    $sql  = sprintf(
+        "SELECT *
+        FROM user
+        WHERE username = '%s'",
+        $mysqli->real_escape_string($_POST["username"])
+    ); // real escape prevents SQL injections
+
+    $result = $mysqli->query($sql);
+    $user = $result->fetch_assoc();
+
+    // Successful login:
+    //regenerate_id = Prevents session fixation attacks: deletes previous session id and generates a new one, while keeping the session variables    
+    if ($user) {
+        if (password_verify($_POST["password"], $user["password_hash"])) {
+            session_regenerate_id(true); 
+            $_SESSION["user_id"] = $user["id"];
+            $is_invalid = true;
+            $failed_attempts = 0; // Reset the failed attempt counter
+            header("Location: index.php");
+            exit;
+        } else{
+            $is_invalid = false;
+        }
+    }
 
     // Log the failed login attempts. Creates failed attemps session variable based on IP
     $failed_attempts_key = 'failed_login_attempts_' . $_SERVER['REMOTE_ADDR']; 
@@ -50,32 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("You are temporarily locked out. Please try again later.");
     }
     
-    $sql  = sprintf(
-        "SELECT *
-        FROM user
-        WHERE username = '%s'",
-        $mysqli->real_escape_string($_POST["username"])
-    ); // real escape prevents SQL injections
-
-    $result = $mysqli->query($sql);
-    $user = $result->fetch_assoc();
-
-    // Successful login:
-    //regenerate_id = Prevents session fixation attacks: deletes previous session id and generates a new one, while keeping the session variables    
-    if ($user) {
-        if (password_verify($_POST["password"], $user["password_hash"])) {
-            session_regenerate_id(true); 
-            $_SESSION["user_id"] = $user["id"];
-            header("Location: index.php");
-            exit;
-        }
-    }
-    
     if(isset($_SESSION["lockout_time"]) && time() - $_SESSION['lockout_time'] < $lockout_duration){
         die("You are currently locked out. Please try again later.");
     }
-
-    $is_invalid = true;
 }
 ?>
 
@@ -103,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </nav>
         <main>
 
-            <?php if (isset($user)): ?>
+            <?php if ($is_invalid): ?>
             <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
             <?php else: ?>
@@ -111,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <h2 id="login-h2">Login</h2>
             <form method="post" novalidate>
                 <div id="login">
-                    <?php if ($is_invalid): ?>
+                    <?php if (isset($user) && !$is_invalid): ?>
                     <em>Invalid login</em>
                     <?php endif; ?>
 
