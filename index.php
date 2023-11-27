@@ -56,10 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
             <?php if (isset($user)): ?>
 
             <!-- Safe version -->
-            <!--<p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p> -->
-
-            <!-- Unsafe version -->
-            <p>Welcome back <b><?= $user["username"] ?></b></p>
+            <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
             <button><a id="black_link" href="logout.php">Log out</a></button>
 
