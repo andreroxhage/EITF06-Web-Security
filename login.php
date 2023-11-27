@@ -9,26 +9,11 @@ session_set_cookie_params([
     'httponly' => true, // Prevent client-side access to the cookie
     'samesite' => 'Strict', // prevents cookie from being sent by the browser with cross-site requests. Prevents CSRF-attacks
 ]);
-session_start();
-
-// If aleady logged in set user details
-if (isset($_SESSION["user_id"])) {  
-    $mysqli = require __DIR__ . "/database.php";
-    
-    $sql = "SELECT * FROM user
-            WHERE id = {$_SESSION["user_id"]}";
-            
-    $result = $mysqli->query($sql);
-    $user = $result->fetch_assoc();
-}
 
 // Handle user authentication logic, including password verification
 // Redirect to appropriate page after authentication
 
 $is_invalid = false;
-$max_attempts = 3; // Log in attempts per session
-$lockout_duration = 300; // 5 minutes in seconds
-$max_lockout_duration = 1800; // 30 minutes
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -36,32 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
     /* 
     Vulnerable code with SQL injection vulnerability
-    Scenario: database stores passwords in plain text
-
-    username: a
-    password: $2y$10$gFQoz1D.fyNqwWoDZhgZ1.EU5TEd/RC42B9/t10c5iUFzr5DjznvO
+    Scenario: database stores passwords in plain text    
     
     Insert
     username: a
-    password: ' or 1=1 -- 
-
-    This results in logging into 'a' without knowing the password 
-
-    another possible attack is to insert
-    '; DROP TABLE user; --
-    to remove the whole table casuing problems for the website owner.
+    password:    ' or 1=1 --'
     
+    a
+    $2y$10$gFQoz1D.fyNqwWoDZhgZ1.EU5TEd/RC42B9/t10c5iUFzr5DjznvO
+    
+    c
+    $2y$12$ifK62nJC33OHqb00DWGzuuBTZVjo95huLT/9Prlb3bbGiCD0Mlowy
+
     */
     
     $username = $_POST["username"];
     $password = $_POST["password"];
     
-    $sql = "SELECT * FROM user WHERE username = '$username' AND password_hash = '$password'";
+    $sql = "SELECT * FROM user WHERE username = '$username' AND (password_hash = '$password')";
     $result = $mysqli->query($sql);
 
     if($result) {
         $user = $result->fetch_assoc();
-            
+        session_start();
+    
         if ($user) {
             session_regenerate_id(true); 
             $_SESSION["user_id"] = $user["id"];
@@ -73,27 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // User not found
             $is_invalid = false;
         }  
-    }
-    
-    // Log the failed login attempts. Creates failed attemps session variable based on IP
-    $failed_attempts_key = 'failed_login_attempts_' . $_SERVER['REMOTE_ADDR']; 
-    $failed_attempts = isset($_SESSION[$failed_attempts_key]) ? $_SESSION[$failed_attempts_key] : 0;
-    $failed_attempts++;
-
-    // Lockout user based on number of failed login attempts. Uses session variable to keep track of attempts based on IP
-    $_SESSION[$failed_attempts_key] = $failed_attempts; 
-
-    // Gradually increase the lockout time. However it wont exeed the maximum duration.
-    if ($failed_attempts >= $max_attempts) {
-        $new_lockout_duration = min($lockout_duration * 2, $max_lockout_duration);
-        
-        $_SESSION['lockout_time'] = time();
-        $_SESSION['lockout_duration'] = $new_lockout_duration;
-        die("You are temporarily locked out. Please try again later.");
-    }
-    
-    if(isset($_SESSION["lockout_time"]) && time() - $_SESSION['lockout_time'] < $lockout_duration){
-        die("You are currently locked out. Please try again later.");
     }
 }
 ?>

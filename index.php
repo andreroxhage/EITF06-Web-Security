@@ -11,14 +11,25 @@ session_set_cookie_params([
 ]);
 session_start();
 
+$loggedIn = false;
+$user = [];
+
 if (isset($_SESSION["user_id"])) {  
     $mysqli = require __DIR__ . "/database.php";
     
-    $sql = "SELECT * FROM user
-            WHERE id = {$_SESSION["user_id"]}";
-            
-    $result = $mysqli->query($sql);
-    $user = $result->fetch_assoc();
+    $userId = $_SESSION["user_id"];
+    $sql = "SELECT * FROM user WHERE id = ?";
+    
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        $loggedIn = true;
+    }
 }
 
 // Check if the form is submitted
@@ -53,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
         <main>
             <h2 id="signup-h2">Welcome to Your Web Shop!</h2>
 
-            <?php if (isset($user)): ?>
+            <?php if ($loggedIn): ?>
 
             <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
