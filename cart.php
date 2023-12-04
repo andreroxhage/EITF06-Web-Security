@@ -1,3 +1,4 @@
+
 <?php
 // Set session timeout to 30 minutes
 ini_set('session.gc_maxlifetime', 1800);
@@ -67,6 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmCart'])) {
             <?php else: ?>
             <h3>Do you want to start shopping? Please log in or sign up first.</h3>
             <?php endif; ?>
+            <header>
+                <h2>Look at these nice cookies!</h2>
+            </header>
+            <img src="https://media.istockphoto.com/id/1176898042/sv/foto/diverse-n%C3%A4rbild-urval-av-te-kex.jpg?s=1024x1024&w=is&k=20&c=CQryVsZ3qgd6-XPWEMQjzAjGVCVegkmuwtELV6b4XRE=" alt="Trulli" width="500" height="333">
 
         </main>
 
