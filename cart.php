@@ -1,3 +1,4 @@
+
 <?php
 // Set session timeout to 30 minutes
 ini_set('session.gc_maxlifetime', 1800);
@@ -67,12 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmCart'])) {
             <?php else: ?>
             <h3>Do you want to start shopping? Please log in or sign up first.</h3>
             <?php endif; ?>
+            <header>
+                <h2> Don't feel like logging in? View our selection of file inclusions!</h2>
+            </header>
+            
+            <h3>Included below is a local file showing a picture. This is hard coded in the php file.</h3>
+            <?php include('picture.php');?>
+            <h3>Included below is a remote webpage. This is hard coded in the php file.</h3>
+            <?php include(urldecode("http://info.cern.ch/hypertext/WWW/TheProject.html"));?>
+            <h1>Lastly, below you can include a page of your choice by changing the url.</h1>
+            <h3>For remote file inclusion, try: "https://www.localhost/EITF06-Web-Security/cart.php?page=http://info.cern.ch/hypertext/WWW/TheProject.html"</h3>
+            <h3>For local file inclusion, try "https://www.localhost/EITF06-Web-Security/cart.php?page=picture.php"</h3>
+            <?php include($_GET["page"]);?>
+            
+            
 
         </main>
-
-        <footer>
-            <p>&copy; 2023 Web Shop</p>
-        </footer>
     </body>
 
 </html>

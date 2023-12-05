@@ -6,7 +6,7 @@ $dbname = "web_shop";
 $username = "root";
 $password = "";
 
-$mysqli = new mysqli($host, $username, $password, $dbname);
+$mysqli = new mysqli($host, $username, $password, $dbname, $user);
 
 
 if ($mysqli->connect_error) {
