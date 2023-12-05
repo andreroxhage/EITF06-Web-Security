@@ -54,7 +54,7 @@ $orderTotal = 10* $cartCount;
             <ul>
                 <li><?= $cartCount ?> Choco cookies:</li>
             </ul>
-            <p>Please pay: <?= htmlspecialchars($orderTotal) ?> coooookieCoins to ????</p>
+            <p>Please pay: <?= htmlspecialchars($orderTotal) ?> coooookieCoins to 17i4ZuPooCtiULrsWYbmRFTMtgn3hPDoj3</p>
 
             <?php else: ?>
             <p>You are not logged in. Please log in to confirm your order.</p>
