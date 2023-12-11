@@ -122,21 +122,21 @@ $stmt = $mysqli->stmt_init();
 
 // SQL prepare statement in order to avoid injection attacks
 if( ! $stmt->prepare( $sql ) ) {
-die("SQL error: ". $mysqli->error);
+    die("SQL error: ". $mysqli->error);
 }
 
 $stmt->bind_param("sss", $_POST["username"],$_POST["address"],$password_hash); // sss means all three inputs are strings
 
 // Redirect to appropriate page after registration
 if( $stmt->execute() ) {
-header("Location: index.php");
-exit();
+    header("Location: index.php");
+    exit();
 } else {
-if( $mysqli->errno === 1062) {
-die("Username already taken! Error nr.". $mysqli->errno);
-} else {
-die($mysqli-> error . " " . $mysqli->errno);
-}
+    if( $mysqli->errno === 1062) {
+        die("Username already taken! Error nr.". $mysqli->errno);
+    } else {
+        die($mysqli-> error . " " . $mysqli->errno);
+    }
 }
 
 ?>
