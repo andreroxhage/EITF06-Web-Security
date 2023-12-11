@@ -55,9 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
 
             <?php if (isset($user)): ?>
 
+            <!-- Safe version -->
             <p>Welcome back <b><?= htmlspecialchars($user["username"]) ?></b></p>
 
             <button><a id="black_link" href="logout.php">Log out</a></button>
+
+            <!-- Add 1 to cart -->
+            <form method="post" action="">
+                <input type="submit" name="addToCart" value="Add to Cart">
+            </form>
 
             <?php else: ?>
             <h3>Please log in or sign up!</h3>
@@ -71,12 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addToCart'])) {
                     src="
                     https://www.dessertfortwo.com/wp-content/uploads/2023/04/Single-Serve-Chocolate-Chip-Cookie-5-735x1103.jpg"
                     alt="cookie">
-                <!-- Add 1 to cart -->
-                <form method="post" action="">
-                    <input type="submit" name="addToCart" value="Add to Cart">
-                </form>
-
-
+               
             </div>
         </main>
         <footer>
