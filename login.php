@@ -26,7 +26,7 @@ if (isset($_SESSION["user_id"])) {
 // Redirect to appropriate page after authentication
 
 $is_invalid = false;
-$max_attempts = 3; // Log in attempts per session
+$max_attempts = 5; // Log in attempts per session
 $lockout_duration = 300; // 5 minutes in seconds
 $max_lockout_duration = 1800; // 30 minutes
 

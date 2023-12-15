@@ -69,13 +69,13 @@ if (!preg_match("/[!@#$%^&*(),.?\":{}|<>]/", $_POST["password"])) {
 
 // Check against common password blacklist
 $commonPasswords = [
-    'password1', '12345678', 'qwerty12', 'letmein12', 'admin123',
-    'welcome1', 'pass1234', 'abc12345', '123qwe', 'letmein123',
-    'football1', 'qazwsx12', 'adminadmin', 'password123', 'passw0rd',
+    'Password1!', 'Qw123456789!', 'Qwerty123!', 'letmein123!', 'Admin123!',
+    'Welcome1!', 'Pass1234!', 'abc12345', '123qwe', 'letmein123',
+    'football1', 'qazwsx12', 'adminadmin', 'password123', 'Passw0rd!',
     '1234abcd', 'q1w2e3r4', '123abc', 'qwertyui', 'trustno1',
     'dragon12', 'iloveyou1', 'sunshine1', '123qweasd', 'qwerty123',
     'qwe12345', '1234qwer', 'password01', 'monkey12', 'test1234',
-    'pass123', '123qweqwe', '12345qwe', '11111111', 'iloveyou12',
+    'pass123', '123qweqwe', '12345qwe', 'Qw11111111!', 'iloveyou12',
     'welcome123', 'admin1234', 'pass12345', 'admin12', 'letmein1234',
     '123456a', 'asdf1234', '1qaz2wsx', 'qazwsx123', 'password12',
     '1234abcd', 'admin12345', 'letmein1', '1234qwer', '123456789a',
@@ -122,21 +122,21 @@ $stmt = $mysqli->stmt_init();
 
 // SQL prepare statement in order to avoid injection attacks
 if( ! $stmt->prepare( $sql ) ) {
-die("SQL error: ". $mysqli->error);
+    die("SQL error: ". $mysqli->error);
 }
 
 $stmt->bind_param("sss", $_POST["username"],$_POST["address"],$password_hash); // sss means all three inputs are strings
 
 // Redirect to appropriate page after registration
 if( $stmt->execute() ) {
-header("Location: index.php");
-exit();
+    header("Location: index.php");
+    exit();
 } else {
-if( $mysqli->errno === 1062) {
-die("Username already taken! Error nr.". $mysqli->errno);
-} else {
-die($mysqli-> error . " " . $mysqli->errno);
-}
+    if( $mysqli->errno === 1062) {
+        die("Username already taken! Error nr.". $mysqli->errno);
+    } else {
+        die($mysqli-> error . " " . $mysqli->errno);
+    }
 }
 
 ?>
