@@ -49,6 +49,7 @@ $orderTotal = 10* $cartCount;
             <h2>Payment details</h2>
 
             <?php if ($user): ?>
+            <p>Your order is hereby confirmed. It will be delivered as soon as we receive your payment</p>
             <p>Please complete the payment, <?= htmlspecialchars($user['username']) ?>!
             </p>
             <ul>
